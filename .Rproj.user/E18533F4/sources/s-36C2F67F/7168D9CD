@@ -1,0 +1,25 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1563277670318.000,
+    "dirty" : false,
+    "encoding" : "ISO8859-1",
+    "folds" : "",
+    "hash" : "0",
+    "id" : "7168D9CD",
+    "lastKnownWriteTime" : 1563277754,
+    "last_content_update" : 1563277754328,
+    "path" : "~/hongR/R/ET.HargreavesSamaniHong.R",
+    "project_path" : "R/ET.HargreavesSamaniHong.R",
+    "properties" : {
+        "cursorPosition" : "3,2",
+        "scrollLine" : "0"
+    },
+    "read_only" : false,
+    "read_only_alternatives" : [
+    ],
+    "relative_order" : 6,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}
