@@ -1,24 +1,24 @@
 {
     "collab_server" : "",
     "contents" : "",
-    "created" : 1563277612309.000,
+    "created" : 1563278210928.000,
     "dirty" : false,
     "encoding" : "ISO8859-1",
     "folds" : "",
-    "hash" : "0",
-    "id" : "D851774A",
-    "lastKnownWriteTime" : 1516967542,
-    "last_content_update" : 1516967542,
-    "path" : "~/hongR/R/CorrectDataBasedAmon.R",
-    "project_path" : "R/CorrectDataBasedAmon.R",
+    "hash" : "1776212892",
+    "id" : "37119B0A",
+    "lastKnownWriteTime" : 1534419191,
+    "last_content_update" : 1534419191,
+    "path" : "~/hongR/R/geom_qq_line.R",
+    "project_path" : "R/geom_qq_line.R",
     "properties" : {
-        "cursorPosition" : "29,20",
+        "cursorPosition" : "22,16",
         "scrollLine" : "0"
     },
     "read_only" : false,
     "read_only_alternatives" : [
     ],
-    "relative_order" : 4,
+    "relative_order" : 7,
     "source_on_save" : false,
     "source_window" : "",
     "type" : "r_source"

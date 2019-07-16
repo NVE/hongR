@@ -1,8 +1,11 @@
-## 
+#' find_upstream_pipes
+#' @param outlet
+#' @param pipe TONODE and FROMNODE
+#'
 find_upstream_pipes <- function(outlet = outlet, pipe = pipe) {
 	require(sf)
 	#for (iO in outlet) {
-	
+
 	nUpStreamOld <- 0
 	UpStream <- which(pipe$TONODE == outlet)
 	TMID <- c(outlet, pipe$FROMNODE[UpStream], pipe$TONODE[UpStream])
@@ -10,7 +13,7 @@ find_upstream_pipes <- function(outlet = outlet, pipe = pipe) {
 	nUpStreamNew <- length(UpStream)
 
 	while (nUpStreamOld < nUpStreamNew) {
-		nUpStreamOld <- length(UpStream) 
+		nUpStreamOld <- length(UpStream)
 		UpStream <- which(pipe$TONODE %in% TMID)
 		nUpStreamNew <- length(UpStream)
 		#print(nUpStreamOld)
@@ -22,6 +25,6 @@ find_upstream_pipes <- function(outlet = outlet, pipe = pipe) {
 		#print(UpStream)
 	}
 	return(pipe[UpStream,])
-	
+
 	#}
 }

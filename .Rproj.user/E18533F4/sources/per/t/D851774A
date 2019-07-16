@@ -1,0 +1,25 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1563277612309.000,
+    "dirty" : false,
+    "encoding" : "ISO8859-1",
+    "folds" : "",
+    "hash" : "855704620",
+    "id" : "D851774A",
+    "lastKnownWriteTime" : 1516967542,
+    "last_content_update" : 1516967542,
+    "path" : "~/hongR/R/CorrectDataBasedAmon.R",
+    "project_path" : "R/CorrectDataBasedAmon.R",
+    "properties" : {
+        "cursorPosition" : "29,20",
+        "scrollLine" : "0"
+    },
+    "read_only" : false,
+    "read_only_alternatives" : [
+    ],
+    "relative_order" : 4,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}
