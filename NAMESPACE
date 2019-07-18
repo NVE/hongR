@@ -2,12 +2,13 @@ exportPattern("^[[:alpha:]]+")
 export(ConvertUnit)
 export(CorrectDataBasedAmon)
 export(ET.HargreavesSamaniHong)
-export(find_upstream_pipes)
+export(find_up_or_down_pipes)
 export(readSWMM_ts)
-
 import(sf)
 import(zoo)
 import(lubridate)
 import(ggplot2)
+import(swmmr)
+
 
 

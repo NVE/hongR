@@ -1,0 +1,25 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1563450880204.000,
+    "dirty" : false,
+    "encoding" : "ISO8859-1",
+    "folds" : "",
+    "hash" : "957114373",
+    "id" : "DB6ABD1",
+    "lastKnownWriteTime" : 1563433225,
+    "last_content_update" : 1563433225,
+    "path" : "~/hongR/R/find_up_or_down_pipes.R",
+    "project_path" : "R/find_up_or_down_pipes.R",
+    "properties" : {
+        "cursorPosition" : "52,0",
+        "scrollLine" : "15"
+    },
+    "read_only" : false,
+    "read_only_alternatives" : [
+    ],
+    "relative_order" : 5,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}
