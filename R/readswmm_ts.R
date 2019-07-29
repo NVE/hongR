@@ -19,17 +19,17 @@ readSWMM_ts <- function(fileName, na = "NULL", skip = 0) {
 	if (length(duplicate_time) >= 1) stop(sprintf("duplicate time %s", raw_time[duplicate_time]))
 	# implement how to deal with repeat
 	raw_zoo <- zoo(raw[,2], raw_time)
-	if (na == "NULL") {
+	if (is.null(na) == TRUE) {
 	  removeNULL <- which(is.na(raw_zoo))
 	  if (length(removeNULL) == 0) {
 	    return(raw_zoo)
 	  } else {
 	    raw_zoo <- raw_zoo[-removeNULL]
 	  }
-	} else if (na == "NA") {
+	} else if (is.na(na) == TRUE) {
 	  raw_zoo <- raw_zoo
 	} else {
-	  raw_zoo[which(is.na(raw_zoo))] <- na
+	  raw_zoo[which(is.na(raw_zoo))] <- -9999
 	}
 
 	# implement missing summary there
