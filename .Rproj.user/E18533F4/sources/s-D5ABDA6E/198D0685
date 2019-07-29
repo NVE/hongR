@@ -1,24 +1,24 @@
 {
     "collab_server" : "",
     "contents" : "",
-    "created" : 1563356939299.000,
+    "created" : 1564412041870.000,
     "dirty" : false,
     "encoding" : "ISO8859-1",
     "folds" : "",
-    "hash" : "2973683182",
-    "id" : "2F9C7E95",
-    "lastKnownWriteTime" : 1563363727,
-    "last_content_update" : 1563363727913,
-    "path" : "~/hongR/R/find_wrong_pipes.R",
-    "project_path" : "R/find_wrong_pipes.R",
+    "hash" : "0",
+    "id" : "198D0685",
+    "lastKnownWriteTime" : 1564412070,
+    "last_content_update" : 1564412070,
+    "path" : "~/hongR/R/write_inp_hong.R",
+    "project_path" : "R/write_inp_hong.R",
     "properties" : {
-        "cursorPosition" : "5,16",
+        "cursorPosition" : "27,17",
         "scrollLine" : "0"
     },
     "read_only" : false,
     "read_only_alternatives" : [
     ],
-    "relative_order" : 11,
+    "relative_order" : 7,
     "source_on_save" : false,
     "source_window" : "",
     "type" : "r_source"
