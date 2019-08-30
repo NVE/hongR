@@ -1,0 +1,25 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1565348917042.000,
+    "dirty" : false,
+    "encoding" : "ISO8859-1",
+    "folds" : "",
+    "hash" : "2556543093",
+    "id" : "84D00861",
+    "lastKnownWriteTime" : 1565352663,
+    "last_content_update" : 1565352663652,
+    "path" : "H:/writing/CatchmentDelineation/code/make_swmm/make_inp_GREEN_AMPT_one_precipitation.R",
+    "project_path" : null,
+    "properties" : {
+        "cursorPosition" : "151,94",
+        "scrollLine" : "120"
+    },
+    "read_only" : false,
+    "read_only_alternatives" : [
+    ],
+    "relative_order" : 4,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}

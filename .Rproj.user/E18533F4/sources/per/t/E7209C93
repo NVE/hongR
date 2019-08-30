@@ -1,0 +1,25 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1565091518606.000,
+    "dirty" : true,
+    "encoding" : "ISO8859-1",
+    "folds" : "",
+    "hash" : "1117569623",
+    "id" : "E7209C93",
+    "lastKnownWriteTime" : 1565091610,
+    "last_content_update" : 1565249190652,
+    "path" : "H:/writing/CatchmentDelineation/code/make_swmm/swmm/make_bat_CatDel_ParSen.R",
+    "project_path" : null,
+    "properties" : {
+        "cursorPosition" : "9,7",
+        "scrollLine" : "1"
+    },
+    "read_only" : false,
+    "read_only_alternatives" : [
+    ],
+    "relative_order" : 3,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}

@@ -1,0 +1,95 @@
+
+#install_github("NVE/hongR", dependencies = TRUE)
+remove(list=ls())
+require(hongR)
+require(swmmr)
+require(ggplot2)
+require(ggsci)
+library(ggpubr)
+options(stringsAsFactors = FALSE)
+
+select_events <- 1
+n_pars <- 3
+CatDels <- c("l30", "ori")   
+
+#n_pars <- 3
+#CatDels <- c(paste("l", seq(30, 30, -1), sep = ""), "ori")   
+
+print("file paths")
+SwmmTimeSeriesPath <- "Z:/honli/MIKE_Grefsen/code/SWMMfromMIKE/swmm_hour/"
+SwmmRunPath <- "Z:/honli/writing/CatchmentDelineation/swmm/"
+plot_path <- "Z:/honli/writing/CatchmentDelineation/swmm"
+
+ResultDataPath <- "H:/MIKE_Grefsen/code/SWMMfromMIKE/result_data/"
+
+exp <- "precipitation"
+events_time <- read.table(sprintf("%s/%s_time.txt", ResultDataPath, exp), header = TRUE, sep = ";")
+
+warm_up <- 12
+
+#CatDels <- "l30"   
+
+#CatDels <- c("ori", paste("l", seq(30), sep = ""))   
+for (i_event in select_events) { #seq(dim(events_time)[1])
+  ########################################################################################  
+  print(i_event)  
+  start_date <- format(as.POSIXct(events_time$start[i_event], format = "%Y%m%dT%H%M", origin = "1970-01-01"), "%m/%d/%Y")
+  start_time <- format(as.POSIXct(events_time$start[i_event], format = "%Y%m%dT%H%M", origin = "1970-01-01"), "%H:%M:%S")
+  end_date <- format(as.POSIXct(events_time$end[i_event], format = "%Y%m%dT%H%M", origin = "1970-01-01"), "%m/%d/%Y")
+  end_time <- format(as.POSIXct(events_time$end[i_event], format = "%Y%m%dT%H%M", origin = "1970-01-01"), "%H:%M:%S")
+  
+  name <- sprintf("%s_%s", format(as.POSIXct(events_time$start[i_event], format = "%Y%m%dT%H%M", origin = "1970-01-01"), "%Y%m%dT%H%M"),
+                  format(as.POSIXct(events_time$end[i_event], format = "%Y%m%dT%H%M", origin = "1970-01-01"), "%Y%m%dT%H%M"))
+  
+  disch_file_name<-sprintf("%s161143_disch_ts_%s_%s.dat", SwmmTimeSeriesPath, exp, name)
+  if (file.info(disch_file_name)$size > 0) {
+    disch <- readSWMM_ts(fileName =disch_file_name, na = NULL)
+    disch_data_frame <- data.frame(time = time(disch), value = as.numeric(disch), 
+                                   Event = rep(i_event, length(disch)),
+                                   variable = rep("discharge at 161143", length(disch)),
+                                   CatDel = rep("measured", length(disch)),
+                                   Par = rep(0, length(disch)))                                   
+  }
+  
+  
+  for (iPar in seq(n_pars)) {
+    re_data_frame <- NULL
+    
+    if (file.info(disch_file_name)$size > 0) {
+      re_data_frame <- rbind(re_data_frame, disch_data_frame) 
+    }
+
+  for (iCatDel in CatDels) {
+
+  out_name <- sprintf("%s%s_%s_default_%s_par%d.out", SwmmRunPath, exp, name, iCatDel, iPar)
+  data_out <- as.data.frame(read_out(file = out_name, iType = 1, object_name = "161143", vIndex = 4)) # total inflow at 161143
+  
+  data_out_temp <- data.frame(total_inflow = data_out$total_inflow[-seq(warm_up)])
+  rownames(data_out_temp) <- rownames(data_out)[-seq(warm_up)]
+  data_out <- data_out_temp
+  #data_out <- as.data.frame(read_out(file = out_name, iType = 3, vIndex = 4)) # total runoff
+  data_frame_out <- data.frame(time = rownames(data_out), value = data_out$total_inflow, 
+                               Event = rep(i_event, length(data_out$total_inflow)),
+                               variable = rep("catchment discharge", length(data_out$total_inflow)), 
+                               CatDel = rep(iCatDel, length(data_out$total_inflow)),
+                               Par = rep(iPar, length(data_out$total_inflow)))
+  
+  re_data_frame <- rbind(re_data_frame, data_frame_out)
+
+  }
+    
+    re_data_frame$time <- as.POSIXct(re_data_frame$time, tz = "GMT")
+    
+    ## make time series plot
+    plotName <-sprintf("%s/node161143_runoff_Event%d_Par%d.png", plot_path, i_event, iPar) 
+    
+    gplot <- ggplot(data = re_data_frame, aes(x=time,y=value, col = CatDel, pch = CatDel)) + geom_line(alpha = 0.6) + geom_point(size = 0.5) #, col = CatDel, pch = as.character(Par))
+    gplot <- gplot + scale_color_npg() + scale_shape_manual(values = seq(length(unique(re_data_frame$CatDel))))
+    ggsave(plotName, plot = gplot, dpi = 600, width = 900, height = 200, units = "mm", limitsize = FALSE)
+    
+  }
+  
+#re_data_frame$variable <- factor(re_data_frame$variable, levels = c("precipitation", "node discharge", "catchment discharge"))
+########################################################################################  
+}
+

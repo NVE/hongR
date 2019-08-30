@@ -1,0 +1,136 @@
+# make inp_green Ampt for all events
+remove(list = ls())
+require(R.utils)
+require(zoo)
+require(readxl)
+require(rgeos)
+require(rgdal)
+require(tibble)
+require(sf)
+require(hongR)
+
+
+options(stringsAsFactors = FALSE)
+
+select_events <- c(1, 6, 7)
+par_max <- 503
+par_min <- 4
+
+print("the loop for catchment delineation")
+CatDels <- c(paste("l", seq(30, 1, -1), sep = ""), "ori")
+
+
+print("file paths")
+SwmmFilePath <- "Z:/honli/MIKE_Grefsen/code/SWMMfromMIKE/swmm_hour"
+SwmmPath <- "Z:/honli/writing/CatchmentDelineation/swmm"
+CodePath <- "Z:/honli/writing/CatchmentDelineation/code/make_swmm"
+ResultDataPath <- "Z:/honli/MIKE_Grefsen/code/SWMMfromMIKE/result_data"
+
+print("swmm commmon options")
+inf_m <- "GREEN_AMPT"
+dry_step <- "00:30:00"
+wet_step <- "00:10:00"
+routing_step <- "00:00:03"
+report_step <- "01:00:00"
+input_step <-  "01:00:00" # timestep of input data
+
+RouteTo <- "IMPERVIOUS"
+aq_Name <- "aquifer_1"
+aq_Ebot <- 1000 # a very large value to avoid error
+aq_Egw <- 10000 # a very large value to avoid error, must > aq_Ebot
+#aq_Umc <- 1 # a very large value to avoid error > Wliting point and less than WP
+
+aq_ETupat <- NA
+ground_Dsw <- 0
+ground_Egwt <- "*"
+junctions_SurDepth <- 0
+junctions_Aponded <- 0
+conduits_InitFlow <- 0.003
+conduits_MaxFlow <- 0
+
+
+outfalls <- c("161142")
+output_node <- c("161142", "161143")
+
+print("swmm parameter")
+swmm_par_default <- swmm_num_par(type = "data.frame", inf_m = "GREEN_AMPT")
+
+cal_pars <- which(swmm_par_default[3,] != "gis")
+cal_par <- swmm_par_default[, cal_pars]
+default_par_value <- as.numeric(swmm_par_default[1, -cal_pars])
+default_par_value <- as.data.frame(t(default_par_value))
+colnames(default_par_value) <- colnames(swmm_par_default[1, -cal_pars])
+rownames(default_par_value) <- "value"
+
+#num_pars <- cal_par[1,]
+num_pars <- swmm_gen_num_pars(n=par_max-par_min+1, input = cal_par)
+write.table(num_pars, file = sprintf("%s/swmm_num_pars_Cal_par%d_%d.txt", SwmmPath, par_min, par_max), col.names = TRUE, row.names = TRUE, quote = FALSE, sep = ";")
+
+
+exp <- "precipitation"
+groundwater_pattern_monthly <- read.table(sprintf("%s/groundwater_pattern_monthly.txt", ResultDataPath), header = TRUE, sep = ";")$flow
+groundwater_pattern_monthly <- round(groundwater_pattern_monthly, 4)
+wastewater_pattern_monthly <- read.table(sprintf("%s/wastewater_pattern_monthly.txt", ResultDataPath), header = TRUE, sep = ";")$flow
+wastewater_pattern_monthly <- round(wastewater_pattern_monthly, 4)
+wastewater_pattern_daily <- read.table(sprintf("%s/wastewater_pattern_daily.txt", ResultDataPath), header = TRUE, sep = ";")$flow
+wastewater_pattern_daily <- round(wastewater_pattern_daily, 4)
+wastewater_pattern_hourly <- read.table(sprintf("%s/wastewater_pattern_hourly.txt", ResultDataPath), header = TRUE, sep = ";")$flow
+wastewater_pattern_hourly <- round(wastewater_pattern_hourly, 4)
+wastewater_pattern_weekend <- read.table(sprintf("%s/wastewater_pattern_weekend.txt", ResultDataPath), header = TRUE, sep = ";")$flow
+wastewater_pattern_weekend <- round(wastewater_pattern_weekend, 4)
+
+print("input data: pipe and node from MIKE")
+
+node <- data.frame(st_read(dsn =ResultDataPath, layer = "msm_Node"))
+node$GroundLeve <- round(node$GroundLeve, 4)
+node$InvertLeve <- round(node$InvertLeve, 4)
+
+pipe <- data.frame(st_read(dsn = ResultDataPath, layer = "swmm_pipe"))
+rough_table <- read_excel("Z:/honli/MIKE_templates/type.xlsx", sheet = "mouse_pipe_roughness")
+
+pipe$MaterialID <- gsub(pattern = " MOUSE", x=pipe$MaterialID, replacement = "")
+pipe$MaterialID[which(pipe$MaterialID == "158Concrete (Smooth)")] <- "Concrete (Smooth)"
+pipe$MaterialID[which(pipe$MaterialID == "Iron")] <- "Iron (cast)"
+pipe$Rough <- rough_table$Roughness[match(pipe$MaterialID, rough_table$MUID_mouse)]
+pipe$UpLevel <- round(pipe$UpLevel, 4)
+pipe$DwLevel <- round(pipe$DwLevel, 4)
+
+
+print("simulation period defined by precipitation event")
+events_time <- read.table(sprintf("%s/%s_time.txt", ResultDataPath, exp), header = TRUE, sep = ";")
+for (iCatDel in CatDels) {
+########################################################################################
+  print(iCatDel)
+
+## catchment
+subcatchments <- data.frame(st_read(dsn = ResultDataPath, layer = sprintf("stormwater_catchment_%s_swmm", iCatDel)))
+wastewater_catchment <- data.frame(st_read(dsn = ResultDataPath, layer = sprintf("wastewater_catchment_%s_swmm", iCatDel)))
+wastewater_catchment$bef_sum <- wastewater_catchment$bef_sum/1e3
+
+for (i_event in select_events) { #seq(dim(events_time)[1]
+  start_date <- format(as.POSIXct(events_time$start[i_event], format = "%Y%m%dT%H%M", origin = "1970-01-01"), "%m/%d/%Y")
+  start_time <- format(as.POSIXct(events_time$start[i_event], format = "%Y%m%dT%H%M", origin = "1970-01-01"), "%H:%M:%S")
+  end_date <- format(as.POSIXct(events_time$end[i_event], format = "%Y%m%dT%H%M", origin = "1970-01-01"), "%m/%d/%Y")
+  end_time <- format(as.POSIXct(events_time$end[i_event], format = "%Y%m%dT%H%M", origin = "1970-01-01"), "%H:%M:%S")
+  report_date <- start_date
+  report_time <- start_time
+
+  prec_ts_file <- sprintf("%s/kjelsaas_prec_ts_%s_%s_%s.dat", SwmmFilePath, exp, format(as.POSIXct(events_time$start[i_event], format = "%Y%m%dT%H%M", origin = "1970-01-01"), "%Y%m%dT%H%M"), format(as.POSIXct(events_time$end[i_event], format = "%Y%m%dT%H%M", origin = "1970-01-01"), "%Y%m%dT%H%M"))
+
+  for (iPar in seq(1, par_max-par_min + 1, 1)) {
+    cal_par_her <- num_pars[iPar, ]
+    cal_par_her <- as.data.frame(t(cal_par_her))
+    rownames(cal_par_her) <- "value"
+    swmm_par <- cbind(cal_par_her, default_par_value, stringsAsFactors = FALSE)
+
+    inp_name <- sprintf("%s/%s_%s_%s_default_%s_par%d.inp", SwmmPath, exp,
+                        format(as.POSIXct(events_time$start[i_event], format = "%Y%m%dT%H%M", origin = "1970-01-01"), "%Y%m%dT%H%M"),
+                        format(as.POSIXct(events_time$end[i_event], format = "%Y%m%dT%H%M", origin = "1970-01-01"), "%Y%m%dT%H%M"),
+                        iCatDel, iPar+par_min-1)
+
+    source(paste(CodePath, "/make_inp_GREEN_AMPT_one_precipitation.R", sep = ""))
+  }
+
+}
+########################################################################################
+}

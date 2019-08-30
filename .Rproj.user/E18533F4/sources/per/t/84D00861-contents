@@ -1,0 +1,221 @@
+
+### make a runable inp
+require(swmmr)
+require(sf)
+require(tibble)
+require(readxl)
+require(rgeos)
+require(rgdal)
+require(hongR)
+
+options(stringsAsFactors = FALSE)
+
+
+list_of_inp_sections <- list()
+list_of_inp_sections$title <- tibble(value = "swmm for Grefsen overvann and combined calibrated at ak52 by R")
+
+list_of_inp_sections$options <- tibble(Option = c("FLOW_UNITS",
+                                                  "INFILTRATION",
+                                                  "FLOW_ROUTING",
+                                                  "LINK_OFFSETS",
+                                                  "FORCE_MAIN_EQUATION",
+                                                  "IGNORE_RAINFALL",
+                                                  "IGNORE_SNOWMELT",
+                                                  "IGNORE_GROUNDWATER",
+												                          "IGNORE_RDII",
+												                          "IGNORE_ROUTING",
+												                          "IGNORE_QUALITY",
+												                          "ALLOW_PONDING",
+												                          "SKIP_STEADY_STATE",
+												                          "SYS_FLOW_TOL",
+												                          "LAT_FLOW_TOL",
+												                          "START_DATE",
+												                          "START_TIME",
+												                          "END_DATE",
+												                          "END_TIME",
+												                          "REPORT_START_DATE",
+							                                    "REPORT_START_TIME",
+												                          "SWEEP_START",
+												                          "SWEEP_END",
+												                          "DRY_DAYS",
+												                          "REPORT_STEP",
+												                          "WET_STEP",
+												                          "DRY_STEP",
+												                          "ROUTING_STEP",
+												                          "LENGTHENING_STEP",
+												                          "VARIABLE_STEP",
+												                          "INERTIAL_DAMPING",
+												                          "NORMAL_FLOW_LIMITED",
+												                          "MIN_SURFAREA",
+												                          "MIN_SLOPE",
+												                          "MAX_TRIALS",
+												                          "HEAD_TOLERANCE",
+                    										          "THREADS"),
+									                    	value = c("CMS",
+									                    	          inf_m,
+									                    	          "DYNWAVE",
+									                    	          "ELEVATION",
+									                    	          "H-W",
+									                    	          "NO",
+									                    	          "YES",
+									                    	          "NO",
+									                    	          "NO",
+									                    	          "NO",
+									                    	          "YES",
+									                    	          "NO",
+									                    	          "NO",
+									                    	          "5",
+									                    	          "5",
+									                    	          start_date,
+									                    	          start_time,
+									                    	          end_date,
+									                    	          end_time,
+									                    	          report_date,
+									                    	          report_time,
+									                    	          "1/1",
+									                    	          "12/31",
+									                    	          0,
+									                    	          report_step,
+									                    	          wet_step,
+									                    	          dry_step,
+									                    	          routing_step,
+									                    	          0,
+									                    	          0,
+									                    	          "NONE",
+									                    	          "BOTH",
+									                    	          0,
+									                    	          0.00035,
+									                    	          8,
+									                    	          0.0015,
+									                    	          1))
+
+list_of_inp_sections$report <- tibble(`Reporting Options` = c("INPUT", "CONTINUITY" ,"FLOWSTATS" ,"CONTROLS" ,"SUBCATCHMENTS" ,rep("NODES"  ,length(output_node))  ,"LINKS"),
+									                    value               = c(c("YES"   ,"YES"        ,"YES"       ,"NONE"     ,"ALL"), c(output_node,"NONE" )))
+
+list_of_inp_sections$evaporation <- tibble(`Data Source` = c("CONSTANT", "DRY_ONLY"), Parameters = c("0.0", "NO"))
+
+list_of_inp_sections$raingages <- tibble(Name = "kjelsaas", Format = "INTENSITY", Interval = input_step,  SCF = 1, Source = "TIMESERIES kjelsaas_prec_ts")
+
+
+
+list_of_inp_sections$subcatchments <- tibble(Name        = as.character(subcatchments$MUID),
+                                             `Rain Gage` = rep("kjelsaas", dim(subcatchments)[1]),
+                                             Outlet      = as.character(subcatchments$outlet),
+                                             Area = round(subcatchments$area*swmm_par$subcat_area, 6),
+                                             Perc_Imperv = round(100.0*(subcatchments$per_sum/subcatchments$per_number)*swmm_par$subcat_imper, 2),
+                                             Width = round((0.25*subcatchments$perimeter-0.5*sqrt(0.25*subcatchments$perimeter^2-4*100*subcatchments$area))*swmm_par$subcat_width, 4),
+                                             Perc_Slope  = round(subcatchments$sl_median*swmm_par$subcat_slope, 4),
+                                             CurbLen = rep(0, dim(subcatchments)[1])*swmm_par$subcat_curb,
+                                             Snowpack = rep(NA, dim(subcatchments)[1]))
+
+list_of_inp_sections$subareas <- tibble(Subcatchment = as.character(subcatchments$MUID),
+                                        `N-Imperv`   = rep(round(swmm_par$subarea_mann_imper, 4), dim(subcatchments)[1]),
+                                            `N-Perv` = rep(round(swmm_par$subarea_mann_per, 4), dim(subcatchments)[1]),
+                                          `S-Imperv` = rep(round(swmm_par$subarea_stora_imper, 4), dim(subcatchments)[1]),
+										                   `S-Perv` = rep(round(swmm_par$subarea_stora_per, 4), dim(subcatchments)[1]),
+										                    PctZero   = rep(round(swmm_par$subarea_stora_zero, 4), dim(subcatchments)[1]),
+										                    RouteTo = rep(RouteTo, dim(subcatchments)[1]),
+										                    PctRouted = rep(round(swmm_par$subarea_PctRoute2P, 4), dim(subcatchments)[1]))
+
+if (inf_m == "HORTON") {
+list_of_inp_sections$infiltration <- tibble(Subcatchment = as.character(subcatchments$MUID),
+                                            MaxRate      = rep(1, dim(subcatchments)[1]),
+                                            MinRate      = rep(0, dim(subcatchments)[1])   ,
+                                            Decay        = rep(0.00115, dim(subcatchments)[1]),
+                                            DryTime      = rep(3, dim(subcatchments)[1])   ,
+                                            MaxInfil     = rep(10, dim(subcatchments)[1]))
+} else if (inf_m == "GREEN_AMPT") {
+list_of_inp_sections$infiltration <- tibble(Subcatchment = as.character(subcatchments$MUID),
+		  							                        Suction      = rep(round(swmm_par$inf_G_S, 4), dim(subcatchments)[1]),
+		  							                        Ksat         = rep(round(swmm_par$inf_G_K, 4), dim(subcatchments)[1]),
+		  							                        IMD          = rep(round(swmm_par$inf_G_I, 4), dim(subcatchments)[1]))
+
+}
+
+list_of_inp_sections$aquifers <- tibble( Name = aq_Name,
+                                         Por = round(swmm_par$aq_Por, 4),
+                                         WP =  round(swmm_par$aq_Por*swmm_par$aq_FC*swmm_par$aq_WP, 4),
+                                         FC =  round(swmm_par$aq_Por*swmm_par$aq_FC, 4),
+                                         Ksat =  round(swmm_par$aq_Ksat,4),
+                                         Kslope =  round(swmm_par$aq_Kslope,4),
+                                         Tslope =  round(swmm_par$aq_Tslope,4),
+                                         ETu =  round(swmm_par$aq_ETu,4),
+                                         ETs =  round(swmm_par$aq_ETs,4),
+                                         Seep =  round(swmm_par$aq_Seep,4),
+                                         Ebot = aq_Ebot,
+                                         Egw = aq_Egw,
+                                         Umc =  round(mean(swmm_par$aq_Por*swmm_par$aq_FC*swmm_par$aq_WP, swmm_par$aq_Por*swmm_par$aq_FC),4),
+                                         ETupat = aq_ETupat)
+
+
+list_of_inp_sections$groundwater <- tibble(Subcatchment = as.character(subcatchments$MUID),
+                                           Aquifer      = rep(aq_Name, dim(subcatchments)[1]),
+                                           Node         = subcatchments$outlet,
+                                           Esurf        = round(subcatchments$Esurf*swmm_par$ground_Esurf, 4),
+                                           A1           = rep(round(swmm_par$ground_A1, 4), dim(subcatchments)[1]),
+                    					   B1           = rep(round(swmm_par$ground_B1, 4), dim(subcatchments)[1]),
+										   A2           = rep(round(swmm_par$ground_A2[1], 4), dim(subcatchments)[1]),
+                    					   B2           = rep(round(swmm_par$ground_B2, 4), dim(subcatchments)[1]),
+                                           A3           = rep(round(swmm_par$ground_A3, 4), dim(subcatchments)[1]),
+                    					   Dsw          = rep(ground_Dsw, dim(subcatchments)[1]),
+										   Egwt         = rep(ground_Egwt, dim(subcatchments)[1]),
+                    					   Ebot         = round(node$GroundLeve[match(subcatchments$outlet, node$MUID)]*swmm_par$ground_Esurf*swmm_par$ground_Egw*swmm_par$ground_Ebot, 4),
+										   Egw          = round(node$GroundLeve[match(subcatchments$outlet, node$MUID)]*swmm_par$ground_Esurf*swmm_par$ground_Egw, 4),
+                    					   Umc          = rep(round(swmm_par$ground_Umc, 4), dim(subcatchments)[1])
+                    					   )
+
+
+list_of_inp_sections$junctions <- tibble(Name      = as.character(node$MUID[-which(node$MUID %in% outfalls)]),
+                                         Elevation = node$GroundLeve[-which(node$MUID %in% outfalls)]*swmm_par$junctions_Elevation,
+                                         MaxDepth  = round(node$GroundLeve[-which(node$MUID %in% outfalls)] - node$InvertLeve[-which(node$MUID %in% outfalls)], 4)*swmm_par$junctions_MaxDepth,
+                                         InitDepth = round(node$GroundLeve[-which(node$MUID %in% outfalls)] - node$InvertLeve[-which(node$MUID %in% outfalls)], 4)*swmm_par$junctions_InitDepth,
+										 SurDepth  = rep(junctions_SurDepth, dim(node)[1]-length(outfalls)),
+										 Aponded   = rep(junctions_Aponded, dim(node)[1]-length(outfalls)))
+
+
+list_of_inp_sections$outfalls <- tibble(Name = outfalls,
+                                        Elevation = node$GroundLeve[which(node$MUID %in% outfalls)],
+                                        Type = rep("FREE", length(outfalls)),
+                                       `Stage Data` = rep(NA, length(outfalls)),
+                                        Gated = rep("NO", length(outfalls)),
+                                       `Route To` = rep(NA, length(outfalls)))
+
+list_of_inp_sections$conduits <- tibble(Name        = as.character(pipe$MUID),
+                                        `From Node` = as.character(pipe$FROMNODE) ,
+                                        `To Node`   = as.character(pipe$TONODE),
+                                        Length      = pipe$Length*swmm_par$conduits_Length,
+                                        Roughness   = pipe$Rough*swmm_par$conduits_Roughness,
+                                        InOffset    = pipe$UpLevel*swmm_par$conduits_InOffset,
+                                        OutOffset   = pipe$DwLevel*swmm_par$conduits_OutOffset,
+                    										InitFlow   = rep(conduits_InitFlow, dim(pipe)[1]),
+                    										MaxFlow    = rep(conduits_MaxFlow, dim(pipe)[1]))
+
+list_of_inp_sections$xsections <- tibble(Name    = as.character(pipe$MUID),
+                                         Shape   = rep("CIRCULAR", dim(pipe)[1]),
+                                         Geom1   = rep(1, dim(pipe)[1]),
+                                         Geom2   = rep(0, dim(pipe)[1]),
+    		                			 Geom3   = rep(0, dim(pipe)[1]),
+    		                			 Geom4   = rep(0, dim(pipe)[1]),
+		    							 Barrels = rep(1, dim(pipe)[1]),
+    		                			 Culvert = rep(NA, dim(pipe)[1]))
+
+list_of_inp_sections$DWF <- tibble(Name = wastewater_catchment$outlet, Constituent = rep("FLOW", dim(wastewater_catchment)[1]),
+                                   Baseline = round(wastewater_catchment$bef_sum, 4), Patterns = rep('"wastewater_monthly" "wastewater_daily" "wastewater_hourly"', dim(wastewater_catchment)[1]))
+
+list_of_inp_sections$timeseries <- tibble(Name = c("kjelsaas_prec_ts"), Date = NA,
+                                          Time = "FILE", Value = prec_ts_file)
+
+list_of_inp_sections$patterns <- tibble(Name = c("wastewater_monthly",
+												 "wastewater_daily",
+												 "wastewater_weekend",
+												 "wastewater_hourly",
+												 "groundwater_monthly"),
+                                       Type = c("MONTHLY", "DAILY", "WEEKEND", "HOURLY", "MONTHLY"),
+                                       Multipliers = rbind(wastewater_pattern_monthly, wastewater_pattern_daily = wastewater_pattern_daily,
+                                                          wastewater_pattern_weekend = wastewater_pattern_weekend, wastewater_pattern_hourly = wastewater_pattern_hourly,
+                                                          groundwater_pattern_monthly = groundwater_pattern_monthly))
+
+#list_of_inp_sections$patterns
+class(list_of_inp_sections) <- "inp"
+
+write_inp_hong(list_of_inp_sections, inp_name)

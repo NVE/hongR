@@ -1,0 +1,25 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1565090861208.000,
+    "dirty" : false,
+    "encoding" : "ISO8859-1",
+    "folds" : "",
+    "hash" : "158988388",
+    "id" : "FDFF051E",
+    "lastKnownWriteTime" : 1565091226,
+    "last_content_update" : 1565091226464,
+    "path" : "H:/writing/CatchmentDelineation/code/make_swmm/swmm/make_inp_CatDel_ParSen.R",
+    "project_path" : null,
+    "properties" : {
+        "cursorPosition" : "95,38",
+        "scrollLine" : "74"
+    },
+    "read_only" : false,
+    "read_only_alternatives" : [
+    ],
+    "relative_order" : 2,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}

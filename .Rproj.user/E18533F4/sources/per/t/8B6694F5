@@ -1,0 +1,25 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1565090684650.000,
+    "dirty" : false,
+    "encoding" : "ISO8859-1",
+    "folds" : "",
+    "hash" : "1268312276",
+    "id" : "8B6694F5",
+    "lastKnownWriteTime" : 1564995648,
+    "last_content_update" : 1564995648,
+    "path" : "H:/writing/CatchmentDelineation/code/swmm1/plot_sim_node161143_runoff.R",
+    "project_path" : null,
+    "properties" : {
+        "cursorPosition" : "38,72",
+        "scrollLine" : "0"
+    },
+    "read_only" : false,
+    "read_only_alternatives" : [
+    ],
+    "relative_order" : 1,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}

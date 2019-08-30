@@ -12,21 +12,21 @@ swmm_num_par <- function(type = "data.frame", inf_m = "GREEN_AMPT") {
   ## conduits
 
   if (type == "data.frame" & inf_m == "GREEN_AMPT") {
-    par <- data.frame(subcat_area  = c(1, "subcatchment", "gis", "hydrology", "Yes", 0.7, 1.3, "scale", "state", "subcatchment area", "ha"),
-                      subcat_imper = c(1, "subcatchment", "gis", "hydrology", "Yes", 0.7, 1.3, "scale", "state", "percentage of impervious area", "%"),
-                      subcat_width = c(1, "subcatchment", "gis", "hydrology", "Yes", 0.7, 1.3, "scale", "state", "width", "m"),
-                      subcat_slope = c(1, "subcatchment", "gis", "hydrology", "Yes", 0.7, 1.3, "scale", "state", "mean or median slope", "%"),
+    par <- data.frame(subcat_area  = c(1, "subcatchment", "gis", "hydrology", "Yes", 0.8, 1.2, "scale", "state", "subcatchment area", "ha"),
+                      subcat_imper = c(1, "subcatchment", "gis", "hydrology", "Yes", 0.8, 1.2, "scale", "state", "percentage of impervious area", "%"),
+                      subcat_width = c(1, "subcatchment", "gis", "hydrology", "Yes", 0.8, 1.2, "scale", "state", "width", "m"),
+                      subcat_slope = c(1, "subcatchment", "gis", "hydrology", "Yes", 0.8, 1.2, "scale", "state", "mean or median slope", "%"),
                       subcat_curb  = c(1, "subcatchment", "gis", "polution", "Yes", 0.7, 1.3, "scale", "state", "curb", "-"),
 
-                      subarea_mann_imper = c(0.013, "subarea", "expert", "hydrology", "Yes", 0.010, 0.033, "absolute", "state", "manning value for impervious area", "-"),
-                      subarea_mann_per = c(0.2, "subarea", "expert", "hydrology", "Yes", 0.02, 0.8, "absolute", "state", "manning value for pervious area", "-"),
+                      subarea_mann_imper = c(0.0013, "subarea", "expert", "hydrology", "Yes", 0.0010, 0.033, "absolute", "state", "manning value for impervious area", "-"),
+                      subarea_mann_per = c(0.002, "subarea", "expert", "hydrology", "Yes", 0.002, 0.8, "absolute", "state", "manning value for pervious area", "-"),
                       subarea_stora_imper = c(1.778, "subarea", "expert", "hydrology", "Yes", 0.3, 2.5, "absolute", "state", "storage for impervious area", "mm"),
                       subarea_stora_per = c(3.81, "subarea", "expert", "hydrology", "Yes", 0.5, 10, "absolute", "state", "storage for pervious area", "mm"),
                       subarea_stora_zero = c(10, "subarea", "expert", "hydrology", "Yes", 0, 100, "absolute", "state", "percentage of zero storage for impervious area", "-"),
                       subarea_PctRoute2P = c(16, "subarea", "expert", "hydrology", "Yes", 5, 100, "absolute", "state", "percentage to route within a subcatchment, subarea routing", "%"),
 
                       inf_G_S=c(100, "infiltration", "expert", "hydrology", "Yes", 10, 200, "absolute", "state", "average value of soil capalarity suction along the wetting front", "mm"),
-                      inf_G_K=c(80, "infiltration", "expert", "hydrology", "Yes", 1, 200, "absolute", "state", "soil saturated hydraulic conductivity", "mm/hour"),
+                      inf_G_K=c(10, "infiltration", "expert", "hydrology", "Yes", 1, 200, "absolute", "state", "soil saturated hydraulic conductivity", "mm/hour"),
                       inf_G_I=c(0.15, "infiltration", "expert", "hydrology", "Yes", 0, 1, "absolute", "intial", "fraction of soil volume intial dry", "-"),
 
                       aq_Por=c(0.5, "aquifer", "expert", "hydrology", "Yes", 0.3, 0.7, "absolute", "state", "volume porosity", "-"),
