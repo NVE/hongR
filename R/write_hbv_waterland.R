@@ -1,3 +1,9 @@
+#' write_hbv_waterland
+#' this function writes a list object area into a file file_waterland
+#' @param area
+#' @param file_waterland
+#' @export
+
 write_hbv_waterland <- function(area = area, file_waterland = file) {
   file.create(file_waterland)
 	for (iCat in length(area)) {

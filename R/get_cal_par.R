@@ -1,6 +1,9 @@
 ## get hbv_parameters from files dew_common
+#' get_cal_common_par
+#' this function get the calibrated parameters based on comparsion of pest file and parameter file
 #' @param tpl_file
 #' @param par_file
+#' @export
 get_cal_common_par <- function(tpl_file = "dew_common_parameters.tpl", par_file = "dew_common_parameters.txt") {
 	tpl <- scan(tpl_file, skip = 1, sep = ":", what = "character")
 	tpl <- matrix(tpl, ncol = 2, byrow = TRUE)
@@ -19,8 +22,12 @@ get_cal_common_par <- function(tpl_file = "dew_common_parameters.tpl", par_file 
 	re <- data.frame(name = par_name, value = par_values)
 	return(re)
 }
+#' get_cal_land_par
+#' this function get the calibrated parameters based on comparsion of pest file and parameter file
 #' @param tpl_file
 #' @param par_file
+#' @export
+
 get_cal_land_par <- function(tpl_file = "dew_landsurface_parameters.tpl", par_file = "dew_landsurface_parameters.txt") {
 	tpl <- readLines(tpl_file, n = -1)
 	tpl <- tpl[-c(1,2)]
@@ -46,8 +53,11 @@ get_cal_land_par <- function(tpl_file = "dew_landsurface_parameters.tpl", par_fi
 
 	return(re)
 }
+#' get_cal_soil_par
+#' this function get the calibrated parameters based on comparsion of pest file and parameter file
 #' @param tpl_file
 #' @param par_file
+#' @export
 get_cal_soil_par <- function(tpl_file = "hbv_soil_parameters.tpl", par_file = "hbv_soil_parameters.txt") {
 	tpl <- readLines(tpl_file, n = -1)
 	tpl <- tpl[-c(1,2)]

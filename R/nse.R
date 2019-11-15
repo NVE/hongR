@@ -1,1 +1,1 @@
-nse <- function(obs = obs, sim = sim) {  1 - sum((obs - sim) ^ 2) / sum((obs - mean(obs)) ^ 2)}
+#' nse#' this function calculates nse#' @param obs#' @param sim#' @exportnse <- function(obs = obs, sim = sim) {  1 - sum((obs - sim) ^ 2) / sum((obs - mean(obs)) ^ 2)}

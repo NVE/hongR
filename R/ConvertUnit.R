@@ -3,7 +3,7 @@
 #' @param inUnit
 #' @param outUnit
 #' @param areaCat
-
+#' @export
 # area are in m2
 ConvertUnit <- function(inN = 1, inUnit = "m3/s", outUnit = "mm/day", areaCat = 1)
 {

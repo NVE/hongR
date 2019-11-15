@@ -2,7 +2,7 @@
 #' @param outlet
 #' @param pipe TONODE and FROMNODE
 #' @param dir "up" or "down"
-#'
+#' @export 
 find_up_or_down_pipes <- function(outlet = outlet, dir = "up", pipe = pipe) {
   if (dir == "up") {
 	nUpStreamOld <- 0

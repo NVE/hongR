@@ -1,4 +1,10 @@
-write_hbv_landscape <- function(landscape_file = landscape_file, landscape = landscape) {
+#' write_hbv_landscape
+#' this function writes a list landscape to a file landscape_file
+#' @param landscape
+#' @param landscpe_file
+#' @export
+
+write_hbv_landscape <- function(landscape = landscape, landscape_file = landscape_file) {
 	# landscape <- list(ncols = 10, nrows = 10, xllcorner = 100, yllcorner = 100, cellsize = 1, NODATA_value = -9999, numberofelements = 1000, landscape_info = data.frame())
   write.table(sprintf("ncols         %d", landscape$ncols), file = landscape_file, append = FALSE, quote = FALSE, col.names = FALSE, row.names = FALSE)
   write.table(sprintf("nrows         %d", landscape$nrows), file = landscape_file, append = TRUE, quote = FALSE, col.names = FALSE, row.names = FALSE)

@@ -1,6 +1,15 @@
 ## modify from spatialEco packages
 ## https://cran.r-project.org/web/packages/spatialEco/spatialEco.pdf
 ## select depends on methods
+#' point.in.poly
+#' this function finds the points in a ploygon
+#' @param x
+#' @param y
+#' @param crs
+#' @param poly.id
+#' @param method
+#' @param n
+#' @export
 point.in.poly <- function (x, y, 
                            crs = CRS("+proj=utm +zone=33 +datum=WGS84 +units=m +no_defs +ellps=WGS84 +towgs84=0,0,0"), 
                            poly.id = NULL, method = "in", n = 5) 

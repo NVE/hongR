@@ -6,7 +6,6 @@
 #' @keywords data
 #' @export
 #' @examples
-#' readHBV(fileName = "data/dew_00400000.out", na = "NULL", skip = 0)
 
 readSWMM_ts <- function(fileName, na = "NULL", skip = 0) {
 	if ( ! require(zoo) )        { install.packages("zoo");        library(zoo) }

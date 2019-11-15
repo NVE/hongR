@@ -1,4 +1,8 @@
-# gen_num_pars
+#' swmm_gen_num_pars
+#' this function generate parametersets based in the ranges
+#' @param n
+#' @param input a dataframe and one par for each column, row1: value row2: min row3: max
+#' @export
 swmm_gen_num_pars <- function(n=n, input = input) {
   value_row <- which(rownames(input) == "value")
   min_row <- which(rownames(input) == "min")

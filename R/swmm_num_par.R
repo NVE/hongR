@@ -1,4 +1,9 @@
-# swmm_par
+#' swmm_num_par
+#' this function make a swmm paramter set
+#' @param type
+#' @param inf_m
+#' @export
+
 swmm_num_par <- function(type = "data.frame", inf_m = "GREEN_AMPT") {
 
   ## subcatchment

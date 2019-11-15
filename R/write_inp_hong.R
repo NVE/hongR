@@ -1,11 +1,12 @@
 #' @param x
 #' @param file
+#' @export
 write_inp_hong <- function(x, file) {
    # check class and required elements
     stopifnot(inherits(x, "inp"))
 
     # use sink to write sections to
-    sink(file = file)
+    sink(file = file, append = TRUE)
 
     # for each setion ...
     for (section in names(x)) {
@@ -14,9 +15,9 @@ write_inp_hong <- function(x, file) {
         cat(paste0("[", toupper(section), "]"), sep = "\n")
         inn_string <- paste(names(x[[section]]), sep = "\t", collapse = "\t")
 
-		## hong add column name
+		    ## hong add column name
         cat(paste(";;", inn_string, sep = ""), sep = "\n")
-		cat(";;--------------", sep = "\n")
+		    cat(";;--------------", sep = "\n")
         # write the data without names
         utils::write.table(x = x[section],
                            quote = FALSE,

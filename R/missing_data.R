@@ -1,4 +1,9 @@
 # if there is missing data and use method to fill
+#' missing_data
+#' this function fill missing data by a interpolate function
+#' @param data
+#' @param fill
+#' @export
 
 missing_data <- function(data = data, fill = NA) {
 # input data is a zoo class
@@ -11,6 +16,18 @@ missing_data <- function(data = data, fill = NA) {
 	} else if (fill == "linear") {
 		return(data)
 	} else {
-		stop("error")
+		stop("error") 
 	}
+}
+#' fill_missing_based_index
+#' this function make a zoo object 
+#' @param data
+#' @param fill
+#' @export
+
+fill_missing_based_index <- function(index_data = index_data, in_data = in_data) {
+	out_data <- zoo(rep(NA, length(index_data)), time(index_data))
+	out_data[which(time(index_data) %in% time(in_data))] <- in_data
+	return(out_data)
+	
 }

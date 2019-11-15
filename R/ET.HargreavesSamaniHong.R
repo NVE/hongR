@@ -1,7 +1,7 @@
 #' calculate ET based on HargreavesSamani
 #' @param data
 #' @param constants
-#'
+#' @export
 ET.HargreavesSamaniHong <- function (data, constants)
 {
     Ta <- (data$Tmax + data$Tmin)/2
