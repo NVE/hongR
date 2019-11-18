@@ -11,7 +11,7 @@ decimal2abc <- function(start_num, series = series) {
     return_str <- character(length = length(series))
 
     for (i_s in seq(length(series))) {
-      print(i_s)
+      #print(i_s)
       if (series[i_s] == -9999) {
         ABCstr <- "!dum!"
       } else {
