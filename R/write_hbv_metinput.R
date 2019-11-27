@@ -1,4 +1,4 @@
-#' writeHBV_metinput.R
+#' write_hbv_metinput.R
 #'
 #' This function write the HBV format input met data.
 #' @param DataZoo data to write, row names are time stamps 20171102/1200
@@ -7,9 +7,9 @@
 #' @keywords data
 #' @export
 #' @examples
-#' writeHBV_metinput()
+#' write_hbv_metinput()
 
-writeHBV_metinput <- function(DataZoo, fileName = "data/input_data.txt") {
+write_hbv_metinput <- function(DataZoo, fileName = "data/input_data.txt") {
 	if ( ! require(zoo) )  { install.packages("zoo");        library(zoo) }
 	print(fileName)
 	write.table(t(c("Time", names(DataZoo))),
