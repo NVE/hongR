@@ -6,7 +6,7 @@
 #' @export
 #' @example DataZoo <- read_APHRODITE(met_path, years = c(), timestep = "daily", vars = c("rr", "tm"), APHRODITE_index)
 read_APHRODITE <- function(met_path = NULL, years = NULL, APHRODITE_index = NULL) {
-  met_path <- "/data05/GlobalHydroPressure/data/APHRODITE/Xinjiang"
+  #met_path <- "/data05/GlobalHydroPressure/data/APHRODITE/Xinjiang"
   
   met_dates <- seq(as.Date(sprintf("%d-01-01", years[1]), as.Date(sprintf("%d-01-01", years[length(years)]), by = timestep)
   
