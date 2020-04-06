@@ -25,12 +25,12 @@ swmm_num_par_pest <- function(type = "data.frame", inf_m = "GREEN_AMPT") {
                       mann_per = c(0.2,    "subarea", "gis", "hydrology", "Yes",    0.2,  0.3, "absolute", "state", "manning value for pervious area", "-", "yes", "mann_per"),
                       stora_imper = c(1.5, "subarea", "gis", "hydrology", "Yes", 0.5, 3.5, "absolute", "state", "storage for impervious area", "mm", "yes", "stora_imper"),
                       stora_per = c(5.0,   "subarea", "gis", "hydrology", "Yes", 4.0, 6, "absolute", "state", "storage for pervious area", "mm", "yes", "stora_per"),
-                      stora_zero = c(20,   "subarea", "gis", "hydrology", "Yes", 1, 100, "absolute", "state", "percentage of zero storage for impervious area", "-", "yes", "stora_zero"),
-                      PctRoute2P = c(30,   "subarea", "gis", "hydrology", "Yes", 15, 60, "absolute", "state", "percentage to route within a subcatchment, subarea routing", "%", "yes", "PctRoute2P"),
+                      stora_zero = c(50,   "subarea", "gis", "hydrology", "Yes", 1, 100, "absolute", "state", "percentage of zero storage for impervious area", "-", "yes", "stora_zero"),
+                      PctRoute2P = c(50,   "subarea", "gis", "hydrology", "Yes", 15, 60, "absolute", "state", "percentage to route within a subcatchment, subarea routing", "%", "yes", "PctRoute2P"),
 
-                      G_S=c(100, "infiltration", "expert", "hydrology", "Yes", 10, 200, "absolute", "state", "average value of soil capalarity suction along the wetting front", "mm", "yes", "G_S"),
-                      G_K=c(80, "infiltration", "expert", "hydrology", "Yes", 50, 120, "absolute", "state", "soil saturated hydraulic conductivity", "mm/hour", "yes", "G_K"),
-                      G_I=c(0.15, "infiltration", "expert", "hydrology", "Yes", 0.001, 0.9, "absolute", "intial", "fraction of soil volume intial dry", "-", "yes", "G_I"),
+                      G_S=c(1, "infiltration", "expert", "hydrology", "Yes", 10, 200, "absolute", "state", "average value of soil capalarity suction along the wetting front", "mm", "yes", "G_S"),
+                      G_K=c(4, "infiltration", "expert", "hydrology", "Yes", 40, 120, "absolute", "state", "soil saturated hydraulic conductivity", "mm/hour", "yes", "G_K"),
+                      G_I=c(1, "infiltration", "expert", "hydrology", "Yes", 0.001, 0.9, "absolute", "intial", "fraction of soil volume intial dry", "-", "yes", "G_I"),
 
                       Por=c(0.5, "aquifer", "expert", "hydrology", "Yes", 0.4, 0.6,    "absolute", "state", "volume porosity", "-", "yes", "Por"),
                       WP=c(0.15, "aquifer", "expert", "hydrology", "Yes", 0.1, 0.2,    "scale", "state", "wilting point soil moisture content where plants cannot extract water from the soil relativ to Porsity and field capacity", "-", "yes", "WP"),
@@ -57,7 +57,7 @@ swmm_num_par_pest <- function(type = "data.frame", inf_m = "GREEN_AMPT") {
                       InitDepth = c(0.01, "junctions", "gis", "hydraulic", "yes", 0, 1, "scale", "intial", "relative to max depth", "-", "no", ""),
 
                       Length = c(1, "conduits", "gis", "hydraulic", "yes", 0.7, 1, "scale", "state", "length relative to GIS source", "-", "no", ""),
-                      Roughness = c(1, "conduits", "gis", "hydraulic", "yes", 0.7, 1.3, "scale", "state", "roughness relative to GIS source", "-", "no", "Roughness"),
+                      Roughness = c(0.0135, "conduits", "gis", "hydraulic", "yes", 0.01, 0.014, "scale", "state", "roughness relative to GIS source", "-", "no", "Roughness"),
                       InOffset = c(1, "conduits", "gis", "hydraulic", "yes", 0.7, 1.3, "scale", "state", "in elevation relativ to GIS source", "-", "no", ""),
                       OutOffset = c(1, "conduits", "gis", "hydraulic", "yes", 0.7, 1.3, "scale", "state", "out elevation relativ to GIS source", "-", "no", ""),
 

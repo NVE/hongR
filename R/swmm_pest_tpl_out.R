@@ -11,6 +11,6 @@ swmm_pest_tpl_out <- function(swmm_par, par_name) {
     swmm_pest_tpl_out <- sprintf("# %s #", swmm_par["pest_name", par_name])
   } else {
     print(par_name)
-    swmm_pest_tpl_out <- round(as.numeric(swmm_par["value", par_name]), 4)
+    swmm_pest_tpl_out <- round(as.numeric(swmm_par["value", par_name]), 20)
   }
 }

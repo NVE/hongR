@@ -16,18 +16,23 @@ missing_data <- function(data = data, fill = NA) {
 	} else if (fill == "linear") {
 		return(data)
 	} else {
-		stop("error") 
+		stop("error")
 	}
 }
 #' fill_missing_based_index
-#' this function make a zoo object 
+#' this function make a zoo object
 #' @param data
 #' @param fill
 #' @export
 
-fill_missing_based_index <- function(index_data = index_data, in_data = in_data) {
-	out_data <- zoo(rep(NA, length(index_data)), time(index_data))
-	out_data[which(time(index_data) %in% time(in_data))] <- in_data
-	return(out_data)
-	
+fill_missing_based_index <- function(index_data = index_data, in_data = in_data, fill = NA, n.local = 2) {
+
+	out_data <- zoo(rep(NA, length(index_data)), index_data)
+	out_data[which(index_data %in% time(in_data))] <- in_data
+	if (is.na(fill) == TRUE) {
+		return(out_data)
+	} else if (fill = "local.linear") {
+
+	}
+
 }
