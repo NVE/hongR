@@ -1,0 +1,28 @@
+#' read_APHRODITE
+#' read APHRODITE data store at the disk to a zoo object
+#' @param met_path
+#' @param years
+#' @param APHRODITE
+#' @export
+#' @example DataZoo <- read_APHRODITE(met_path, years = c(), timestep = "daily", vars = c("rr", "tm"), APHRODITE_index)
+read_APHRODITE <- function(met_path = NULL, years = NULL, APHRODITE_index = NULL) {
+  #met_path <- "/data05/GlobalHydroPressure/data/APHRODITE/Xinjiang"
+  
+  met_dates <- seq(as.Date(sprintf("%d-01-01", years[1]), as.Date(sprintf("%d-01-01", years[length(years)]), by = timestep)
+  
+  met_input <- setNames(data.frame(matrix(ncol = 2*length(APHRODITE_index), nrow = length(met_dates)), rep(APHRODITE_index, 2))
+  
+  for (iY in years) {
+    time_index <- which(year(met_dates) == iY)
+    for (iV in seq(length(vars))) {
+      met_file <- sprintf("%s/%s/%s.%d.nc", met_path, timestep, vars[iV], iY)
+      met_id <- nc_open(met_file, write = FALSE, verbose = TRUE)
+      met_data <- ncvar_get(met_id, iV)[APHRODITE_index]
+      met_input[time_index, (1 + length(APHRODITE_index)*(iV - 1)):(length(APHRODITE_index)*iV)] <- met_data
+    }
+  }
+}
+read_APHRODITE <- zoo(met_input, met_dates)
+return(read_APHRODITE)
+
+}
