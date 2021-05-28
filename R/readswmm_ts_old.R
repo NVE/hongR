@@ -7,12 +7,12 @@
 #' @export
 #' @examples
 
-readSWMM_ts <- function(fileName, na = "NULL", skip = 0) {
+readSWMM_ts_old <- function(fileName, na = "NULL", skip = 0) {
 	if ( ! require(zoo) )        { install.packages("zoo");        library(zoo) }
 	print(fileName)
 
 	raw <- read.table(fileName, header = FALSE, skip = skip, sep = "\t", dec = ".")
-	raw_time <- as.POSIXct(as.character(raw[,1]), format = "%m/%d/%Y %H:%M:%S", tz = "GMT", origin = "1970-01-01");
+	raw_time <- as.POSIXct(as.character(raw[,1]), format = "%m/%d/%Y %H:%M", tz = "GMT", origin = "1970-01-01");
 
 	duplicate_time <- which(duplicated(raw_time))
 	if (length(duplicate_time) >= 1) stop(sprintf("duplicate time %s", raw_time[duplicate_time]))
