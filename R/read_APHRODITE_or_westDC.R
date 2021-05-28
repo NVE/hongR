@@ -23,10 +23,7 @@ read_APHRODITE_or_westDC <- function(met_path = NULL, years = NULL, time_step = 
       met_file <- sprintf("%s/%s.nc", met_path, vars[iV])
       met_id <- nc_open(met_file, write = FALSE, verbose = FALSE)
       met_data <- ncvar_get(met_id, vars[iV])
-      #if (iV == 1) met_time <- nc.get.time.series(met_id)
-      #met_time <- ncvar_get(nc_id, "time")
-
-      #met_input[time_index, (1 + length(APHRODITE_index)*(iV - 1)):(length(APHRODITE_index)*iV)] <- met_data
+      print(sprintf("dimension of %s is %d", vars[iV], dim(met_data)))
       if (iV == 1) {
          lon <- ncvar_get(met_id, "lon")
          lat <- ncvar_get(met_id, "lat")
